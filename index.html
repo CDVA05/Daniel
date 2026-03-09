@@ -18,38 +18,18 @@ body{
     align-items:center;
     overflow:hidden;
 }
-    text-align:center;
-    height:100vh;
-    margin:0;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-.fondo-corazon{
-    position:absolute;
-    font-size:20px;
-    opacity:0.2;
-    animation:flotar 10s linear infinite;
-}
 
-@keyframes flotar{
-    0%{
-        transform:translateY(100vh);
-    }
-    100%{
-        transform:translateY(-100vh);
-    }
-}
+/* tarjeta central */
+
 .container{
     background:white;
     padding:40px;
     border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+    z-index:2;
 }
 
-h1{
-    margin-bottom:30px;
-}
+/* botones */
 
 button{
     font-size:18px;
@@ -60,14 +40,63 @@ button{
     cursor:pointer;
 }
 
+/* botón SI brillante */
+
 #si{
     background:#ff4d6d;
     color:white;
+    animation:brillo 1.5s infinite alternate;
+}
+
+@keyframes brillo{
+    from{
+        box-shadow:0 0 10px #ff4d6d;
+    }
+    to{
+        box-shadow:0 0 30px #ff4d6d,0 0 50px #ff8fa3;
+    }
 }
 
 #no{
     background:#ccc;
     position:absolute;
+}
+
+/* corazones flotando */
+
+.fondo-corazon{
+    position:absolute;
+    font-size:20px;
+    opacity:0.3;
+    animation:flotar linear infinite;
+}
+
+@keyframes flotar{
+    from{
+        transform:translateY(100vh);
+    }
+    to{
+        transform:translateY(-10vh);
+    }
+}
+
+/* corazones explosión */
+
+.corazon{
+    position:fixed;
+    font-size:30px;
+    animation:explosion 2s forwards;
+}
+
+@keyframes explosion{
+    0%{
+        transform:scale(1);
+        opacity:1;
+    }
+    100%{
+        transform:translateY(-300px) scale(2);
+        opacity:0;
+    }
 }
 
 #mensaje{
@@ -76,65 +105,77 @@ button{
     font-weight:bold;
 }
 
-.corazon{
-    position:fixed;
-    font-size:30px;
-    animation:subir 3s linear forwards;
-}
-
-@keyframes subir{
-    0%{
-        transform:translateY(0);
-        opacity:1;
-    }
-    100%{
-        transform:translateY(-600px);
-        opacity:0;
-    }
-}
-
 </style>
 
 <script>
 
+/* botón SI */
+
 function decirSi(){
 
-    document.getElementById("mensaje").innerHTML =
-    "❤️ ¡Perfecto! Entonces entrenamos mañana a las 5";
+document.getElementById("mensaje").innerHTML =
+"❤️ ¡Perfecto! Entonces entrenamos mañana a las 5";
 
-    for(let i=0;i<150;i++){
-    crearCorazon();
+for(let i=0;i<120;i++){
+crearExplosion();
 }
 
 }
+
+/* mover botón NO */
 
 function moverNo(){
 
-    let x=Math.random()*window.innerWidth*0.8;
-    let y=Math.random()*window.innerHeight*0.8;
+let x=Math.random()*window.innerWidth*0.8;
+let y=Math.random()*window.innerHeight*0.8;
 
-    let boton=document.getElementById("no");
-    boton.style.left=x+"px";
-    boton.style.top=y+"px";
+let boton=document.getElementById("no");
+boton.style.left=x+"px";
+boton.style.top=y+"px";
+
+}
+
+/* explosión de corazones */
+
+function crearExplosion(){
+
+let corazon=document.createElement("div");
+
+corazon.classList.add("corazon");
+corazon.innerHTML="❤️";
+
+corazon.style.left=Math.random()*window.innerWidth+"px";
+corazon.style.top=Math.random()*window.innerHeight+"px";
+
+document.body.appendChild(corazon);
+
+setTimeout(()=>{
+corazon.remove();
+},2000);
 
 }
 
-function crearCorazon(){
+/* corazones del fondo */
 
-    let corazon=document.createElement("div");
-    corazon.classList.add("corazon");
-    corazon.innerHTML="❤️";
+function fondoCorazones(){
 
-    corazon.style.left=Math.random()*window.innerWidth+"px";
-    corazon.style.bottom="0px";
+for(let i=0;i<40;i++){
 
-    document.body.appendChild(corazon);
+let corazon=document.createElement("div");
 
-    setTimeout(()=>{
-        corazon.remove();
-    },3000);
+corazon.classList.add("fondo-corazon");
+corazon.innerHTML="❤️";
+
+corazon.style.left=Math.random()*window.innerWidth+"px";
+corazon.style.animationDuration=(5+Math.random()*10)+"s";
+
+document.body.appendChild(corazon);
 
 }
+
+}
+
+window.onload=fondoCorazones;
 
 </script>
 
@@ -155,7 +196,6 @@ function crearCorazon(){
 
 </body>
 </html>
-
 
 
 
